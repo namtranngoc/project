@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
-                // window.location.reload(); // Tải lại trang
                 const authButtonsContainer = document.getElementById('authButtons');
                 if (authButtonsContainer) {
                     authButtonsContainer.innerHTML = `

@@ -21,6 +21,8 @@ cd django_backend
 # 2. Tạo môi trường ảo (virtual environment) tên là 'venv'
 python -m venv venv
 
+Set-ExecutionPolicy Unrestricted -Scope Process
+
 # 3. Kích hoạt môi trường ảo
 # Trên Windows (Command Prompt):
 venv\Scripts\activate
@@ -33,6 +35,7 @@ source venv/bin/activate
 python manage.py runserver
 
 # 4. Cài đặt tất cả thư viện cần thiết từ file requirements.txt
+pip freeze > requirements.txt
 pip install -r requirements.txt
 
 # 5. Tạo file database (db.sqlite3) lần đầu
@@ -46,3 +49,14 @@ python manage.py createsuperuser
 # Nếu bạn có thay đổi trong file 'users/models.py', chạy 2 lệnh sau:
 python manage.py makemigrations users
 python manage.py migrate
+<<<<<<< HEAD
+=======
+# Thư viện để chạy server Python (thay thế runserver)
+pip install gunicorn
+
+# Thư viện để kết nối Django với database PostgreSQL
+pip install psycopg2-binary
+
+# Thư viện giúp đọc URL của database
+pip install dj-database-url
+>>>>>>> 1e39527 (Fix: Line endings for build.sh)
