@@ -93,8 +93,9 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASE_URL_RENDER = env('DATABASE_URL_RENDER', default=None)
 if DATABASE_URL_RENDER:
+    # Nếu biến môi trường DATABASE_URL_RENDER tồn tại, thay thế SQLite bằng PostgreSQL
+    import dj_database_url # Đảm bảo dòng này đã được import
     DATABASES['default'] = dj_database_url.parse(DATABASE_URL_RENDER, conn_max_age=600)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
