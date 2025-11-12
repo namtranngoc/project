@@ -46,4 +46,3 @@ python manage.py createsuperuser
 # Nếu bạn có thay đổi trong file 'users/models.py', chạy 2 lệnh sau:
 python manage.py makemigrations users
 python manage.py migrate
-# bvug rxlu mucq dhzp
