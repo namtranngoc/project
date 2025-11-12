@@ -61,3 +61,5 @@ pip install psycopg2-binary
 pip install dj-database-url
 >>>>>>> 1e39527 (Fix: Line endings for build.sh)
 postgresql://project_wpr4_user:fglVOG9lvz9lDpaAcE7OF4iUmNqqlM0S@dpg-d4a6g2vgi27c739smfv0-a/project_wpr4
+https://project-ux9u.onrender.com/
+project-delta-three-32.vercel.app

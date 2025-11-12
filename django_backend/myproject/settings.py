@@ -97,6 +97,7 @@ if DATABASE_URL_RENDER:
     # Nếu biến môi trường DATABASE_URL_RENDER tồn tại, thay thế SQLite bằng PostgreSQL
     import dj_database_url # Đảm bảo dòng này đã được import
     DATABASES['default'] = dj_database_url.parse(DATABASE_URL_RENDER, conn_max_age=600)
+    DATABASES['default'] = dj_database_url.parse('postgresql://project_wpr4_user:fglVOG9lvz9lDpaAcE7OF4iUmNqqlM0S@dpg-d4a6g2vgi27c739smfv0-a/project_wpr4')
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
