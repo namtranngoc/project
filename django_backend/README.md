@@ -60,4 +60,4 @@ pip install psycopg2-binary
 # Thư viện giúp đọc URL của database
 pip install dj-database-url
 >>>>>>> 1e39527 (Fix: Line endings for build.sh)
-postgresql://project_8zbt_user:n9jjLZAiYsNtwOw1LDY5sVsUggTPlMZa@dpg-d4a5l2buibrs73c7pl5g-a/project_8zbt
+postgresql://project_wpr4_user:fglVOG9lvz9lDpaAcE7OF4iUmNqqlM0S@dpg-d4a6g2vgi27c739smfv0-a/project_wpr4

@@ -163,9 +163,9 @@ DJOSER = {
         'user': 'djoser.serializers.UserSerializer',
         'current_user': 'djoser.serializers.UserSerializer',
     },
-    'DOMAIN': '127.0.0.1:5500',
+    'DOMAIN': 'project-delta-three-32.vercel.app',
     'SEND_ACTIVATION_EMAIL': False, # Tắt gửi email kích hoạt
-    'PASSWORD_RESET_CONFIRM_URL': 'baitap/password-reset-confirm.html?uid={uid}&token={token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'https://project-delta-three-32.vercel.app/baitap/password-reset-confirm.html?uid={uid}&token={token}',
     'USERNAME_RESET_CONFIRM_URL': 'baitap/username-reset-confirm.html?uid={uid}&token={token}',
     'ACTIVATION_URL': 'baitap/activate.html?uid={uid}&token={token}',
 }

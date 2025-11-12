@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. ĐỊNH NGHĨA BIẾN VÀ API ---
-    const API_URL = 'http://127.0.0.1:8000/api/auth/';
+    const API_URL = 'https://project-ux9u.onrender.com/api/auth/';
     
     // Lấy các Form
     const loginForm = document.getElementById('loginForm');
