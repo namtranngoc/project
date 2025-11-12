@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FE Shop – Thanh toán</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header mb-3">
+    <nav class="navbar navbar-light navbar-expand-lg container">
+      <a class="navbar-brand brand-logo" href="index.html"><span class="brand-fe">Real Madrid</span><span class="brand-shop">Shop</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Sản phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html">Giỏ hàng (<span id="cart-count">0</span>)</a></li>
+          <li class="nav-item"><a class="nav-link active" href="checkout.html">Thanh toán</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container my-3">
+    <h1 class="h3 mb-3">Thông tin thanh toán</h1>
+    <form id="checkout-form" class="bg-white border border-secondary rounded p-3">
+      <div class="mb-3">
+        <label for="name" class="form-label">Họ và tên</label>
+        <input id="name" name="name" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" name="email" type="email" class="form-control" required />
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="phone" class="form-label">SĐT</label>
+          <input id="phone" name="phone" class="form-control" required />
+        </div>
+        <div class="col-md-6">
+          <label for="zip" class="form-label">Mã bưu chính</label>
+          <input id="zip" name="zip" class="form-control" />
+        </div>
+      </div>
+      <div class="mb-3 mt-3">
+        <label for="address" class="form-label">Địa chỉ</label>
+        <input id="address" name="address" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="note" class="form-label">Ghi chú</label>
+        <textarea id="note" name="note" rows="3" class="form-control"></textarea>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Đặt hàng</button>
+        <button type="reset" class="btn btn-outline-primary" id="reset">Xoá form</button>
+      </div>
+      <p class="text-secondary small mt-2">* Demo FE: không có thanh toán thực, dữ liệu lưu cục bộ (localStorage).</p>
+    </form>
+    <div id="result" class="mt-3" hidden></div>
+  </main>
+
+  <footer class="site-footer mt-4">
+    <div class="container py-3 text-secondary small">
+      <p class="mb-0">&copy; <span id="year"></span> Real Madrid Shop.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initCartCount, clearCart } from './js/cart.js';
+
+    const form = document.getElementById('checkout-form');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      const orderId = 'OD' + Date.now().toString(36).toUpperCase();
+      localStorage.setItem('fe_order_last', JSON.stringify({ id: orderId, ...data }));
+      clearCart();
+      result.hidden = false;
+      result.innerHTML = `
+        <div class="alert alert-success">
+          <h4 class="alert-heading">Đặt hàng thành công</h4>
+          <p>Mã đơn: <strong>${orderId}</strong></p>
+          <hr>
+          <a class="btn btn-success" href="index.html">Về trang chủ</a>
+        </div>`;
+      form.reset();
+      initCartCount();
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    initCartCount();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

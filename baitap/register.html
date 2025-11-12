@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
+    <h2>Đăng ký tài khoản</h2>
+
+    <form id="register-form">
+        <div>
+            <label for="username">Tên đăng nhập:</label>
+            <input type="text" id="username" required>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+        </div>
+        <div>
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit">Đăng ký</button>
+    </form>
+    
+    <p id="message"></p>
+
+    <script src="./js/auth.js"></script>
+</body>
+</html>

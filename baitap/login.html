@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập / Đăng ký</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #c3ecf3, #8fbfe5);
+      margin: 0;
+    }
+
+    .container {
+      position: relative;
+      width: 400px;
+      background: #fafafa;
+      border-radius: 10px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #2575fc;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #1a5ed8;
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .toggle a {
+      color: #2575fc;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .form {
+      display: none;
+      animation: fade 0.3s ease;
+    }
+
+    .form.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {opacity: 0; transform: translateY(-10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .forgot-link-center {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      color: #2575fc;
+      cursor: pointer;
+    }
+
+    /* === CSS CHO THÔNG BÁO === */
+    .form-message {
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .form-message.error {
+      color: #d9534f; /* Màu đỏ */
+    }
+    .form-message.success {
+      color: #5cb85c; /* Màu xanh */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <form id="loginForm" class="form active">
+      <h2>Đăng nhập</h2>
+      <div class="form-group">
+        <label for="loginUsername">Tên đăng nhập</label>
+        <input type="text" id="loginUsername" required />
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Mật khẩu</label>
+        <input type="password" id="loginPassword" required />
+      </div>
+      <p id="loginMessage" class="form-message"></p>
+      <button type="submit">Đăng nhập</button>
+      <div class="toggle">
+        Chưa có tài khoản? <a id="showRegister">Đăng ký</a>
+      </div>
+      <a id="forgotLink" class="forgot-link-center">Quên mật khẩu?</a>
+    </form>
+
+    <form id="registerForm" class="form">
+      <h2>Đăng ký</h2>
+      <div class="form-group">
+        <label for="regName">Họ và tên</label>
+        <input type="text" id="regName" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="regUsername">Tên đăng nhập</label>
+        <input type="text" id="regUsername" required />
+      </div>
+      
+      <div class="form-group">
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" required />
+      </div>
+      <div class="form-group">
+        <label for="regPassword">Mật khẩu</label>
+        <input type="password" id="regPassword" required />
+      </div>
+      <p id="registerMessage" class="form-message"></p>
+      <button type="submit">Tạo tài khoản</button>
+      <div class="toggle">
+        Đã có tài khoản? <a id="showLogin">Đăng nhập</a>
+      </div>
+    </form>
+
+    <form id="forgotForm" class="form" style="display:none">
+      <h2>Quên mật khẩu</h2>
+      <div class="form-group">
+        <label for="forgotEmail">Nhập email đã đăng ký</label>
+        <input type="email" id="forgotEmail" required />
+      </div>
+      
+      <p id="forgotMessage" class="form-message"></p>
+      <button type="submit">Gửi link đặt lại mật khẩu</button>
+      <div class="toggle">
+        <a id="showLoginFromForgot">Quay lại đăng nhập</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
