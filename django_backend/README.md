@@ -63,3 +63,6 @@ pip install dj-database-url
 postgresql://project_wpr4_user:fglVOG9lvz9lDpaAcE7OF4iUmNqqlM0S@dpg-d4a6g2vgi27c739smfv0-a/project_wpr4
 https://project-ux9u.onrender.com/
 project-delta-three-32.vercel.app
+
+# fontend đẩy lên server https://vercel.com/
+# backend đẩy lên server https://www.pythonanywhere.com/
