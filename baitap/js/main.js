@@ -1,78 +1,71 @@
-// js/main.js
-// File này dùng để kiểm tra trạng thái đăng nhập
-// trên các trang chung (index.html, cart.html, v.v.)
+// js/main.js - Code chuẩn để kiểm tra đăng nhập
 
-// 1. Định nghĩa API URL
+// Link tới Backend PythonAnywhere của bạn
 const API_URL = 'https://namtranngoc.pythonanywhere.com/api/auth/';
 
-// 2. Chờ cho toàn bộ HTML tải xong
 document.addEventListener('DOMContentLoaded', () => {
-
-    // 3. Tìm phần tử <li id="authButtons">
     const authButtonsContainer = document.getElementById('authButtons');
     const accessToken = localStorage.getItem('accessToken');
 
-    if (accessToken && authButtonsContainer) {
-        // 4. NẾU ĐÃ ĐĂNG NHẬP
+    // Hàm hiển thị nút Đăng nhập (Dùng khi chưa login hoặc lỗi token)
+    const showLoginButton = () => {
+        if (authButtonsContainer) {
+            authButtonsContainer.innerHTML = `
+                <a href="login.html" class="btn btn-primary nav-link text-white px-3">Đăng nhập</a>
+            `;
+        }
+    };
 
-        // Lấy thông tin user (để hiển thị tên)
-        fetch(API_URL + 'users/user/', {
+    // LOGIC CHÍNH
+    if (accessToken && authButtonsContainer) {
+        // 1. Nếu có token trong máy, gọi API để kiểm tra xem token còn sống không
+        fetch(API_URL + 'users/me/', {
             method: 'GET',
             headers: {
-                // Gửi token lên để xác thực
-                'Authorization': `JWT ${accessToken}` 
+                'Authorization': `JWT ${accessToken}`,
+                'Content-Type': 'application/json'
             }
         })
         .then(response => {
             if (response.ok) {
                 return response.json();
             } else {
-                // Token có thể bị hết hạn
-                throw new Error('Token không hợp lệ');
+                // Nếu server trả về lỗi (401 Unauthorized), nghĩa là token hết hạn
+                throw new Error('Token hết hạn');
             }
         })
         .then(user => {
-            // Đã lấy được thông tin user
-            // Thay thế HTML của <li id="authButtons">
+            // 2. ĐĂNG NHẬP THÀNH CÔNG -> Hiển thị tên và nút Đăng xuất
+            console.log("Đăng nhập thành công:", user);
+
             authButtonsContainer.innerHTML = `
-                <span class="nav-link text-dark me-2">Chào, ${user.first_name || user.username}!</span>
-                <a href="#" id="logout-link" class="btn btn-outline-danger">Đăng xuất</a>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="nav-link text-dark fw-bold">Hi, ${user.first_name || user.username}</span>
+                    <button id="logout-link" class="btn btn-outline-danger btn-sm">Đăng xuất</button>
+                </div>
             `;
             
-            // Gắn sự kiện cho nút Đăng xuất
+            // Gắn sự kiện cho nút Đăng xuất vừa tạo
             document.getElementById('logout-link').addEventListener('click', (e) => {
                 e.preventDefault();
+                // Xóa token
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
-                const authButtonsContainer = document.getElementById('authButtons');
-                if (authButtonsContainer) {
-                    authButtonsContainer.innerHTML = `
-                        <span class="nav-link text-danger">Đang đăng xuất...</span>
-                    `;
-                }
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000); // 1000ms = 1 giây
+                
+                // Reload trang
+                window.location.reload();
             });
-            
         })
-        
-        
         .catch(error => {
-            // Lỗi (ví dụ token hết hạn) -> Xóa token và hiển thị như khách
+            // 3. LỖI (Token đểu hoặc hết hạn) -> Xóa token và hiện nút Đăng nhập
             console.error('Lỗi xác thực:', error);
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            // Đảm bảo nút Đăng nhập vẫn hiển thị
-            authButtonsContainer.innerHTML = `
-                <a href="login.html" class="btn nav-link">Đăng nhập</a>
-            `;
+            showLoginButton();
         });
 
-    } else if (authButtonsContainer) {
-        // 5. NẾU CHƯA ĐĂNG NHẬP (Giữ nguyên)
-        authButtonsContainer.innerHTML = `
-            <a href="login.html" class="btn nav-link">Đăng nhập</a>
-        `;
+    } else {
+        // 4. KHÁCH VÃNG LAI (Chưa có token) -> Hiện nút Đăng nhập
+        showLoginButton();
     }
 });
