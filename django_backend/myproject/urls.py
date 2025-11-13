@@ -16,10 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from orders.views import OrderAdminViewSet
+from rest_framework.routers import DefaultRouter
 
+
+router = DefaultRouter()
+router.register(r'orders/admin', OrderAdminViewSet, basename='admin-orders')
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 2. Thêm 2 dòng này để kích hoạt API của Djoser
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.jwt')),
+    path('api/', include(router.urls)),
 ]

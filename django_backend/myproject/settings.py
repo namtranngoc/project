@@ -115,3 +115,14 @@ EMAIL_HOST_USER = 'llsakers2@gmail.com'
 EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr' 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}

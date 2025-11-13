@@ -1,7 +1,7 @@
-// js/admin.js
+// js/admin.js - PHIÊN BẢN FIX LỖI QUYỀN & HIỂN THỊ DỮ LIỆU
 
 document.addEventListener('DOMContentLoaded', () => {
-    // === CHỈNH SỬA URL NÀY CHO KHỚP VỚI SERVER PYTHONANYWHERE CỦA BẠN ===
+    // === CẤU HÌNH API ===
     const BASE_API_URL = 'https://namtranngoc.pythonanywhere.com';
     const ORDER_API_URL = `${BASE_API_URL}/api/orders/admin/`;
     const USER_API_URL = `${BASE_API_URL}/api/auth/users/`;
@@ -10,80 +10,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const ordersTableBody = document.getElementById('orders-table-body');
     const usersTableBody = document.getElementById('users-table-body');
     const logoutLink = document.getElementById('admin-logout');
+    const statusMessageEl = document.getElementById('orders-status-message');
 
-    // =======================================================
-    // === 1. KIỂM TRA ĐĂNG NHẬP VÀ XÁC THỰC ADMIN (GUARD) ===
-    // =======================================================
-    
+    // 1. Kiểm tra sơ bộ: Nếu không có token, đá về login ngay
     if (!token) {
-        // Nếu không có token, chuyển hướng về trang đăng nhập
-        alert('Vui lòng đăng nhập bằng tài khoản Admin.');
         window.location.href = 'login.html';
         return;
+    }else{
+        window.location.href = 'admin.html'
     }
 
-    // --- Logout Handler ---
-    logoutLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        window.location.href = 'login.html';
-    });
+    // 2. Hàm xử lý Đăng xuất
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = 'index.html';
+        });
+    }
 
-    // ===================================================
-    // === 2. HÀM TẢI DỮ LIỆU ĐƠN HÀNG VÀ RENDER (CRUD) ===
-    // ===================================================
+    // ============================================================
+    // 3. HÀM RENDER (HIỂN THỊ DỮ LIỆU RA BẢNG)
+    // ============================================================
 
     const renderOrders = (orders) => {
-        ordersTableBody.innerHTML = ''; // Xóa thông báo 'Đang tải...'
-
-        if (orders.length === 0) {
-            ordersTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Không có đơn hàng nào.</td></tr>`;
+        ordersTableBody.innerHTML = '';
+        if (!orders || orders.length === 0) {
+            ordersTableBody.innerHTML = `<tr><td colspan="6" class="text-center">Chưa có đơn hàng nào.</td></tr>`;
             return;
         }
 
         orders.forEach(order => {
-            const statusMap = {
-                'pending': { text: 'Đang chờ', class: 'bg-warning' },
-                'shipped': { text: 'Đã vận chuyển', class: 'bg-primary' },
-                'delivered': { text: 'Đã giao hàng', class: 'bg-success' },
-                'cancelled': { text: 'Đã hủy', class: 'bg-danger' }
-            };
-            const currentStatus = statusMap[order.status] || { text: order.status, class: 'bg-secondary' };
+            // Map trạng thái sang màu sắc/tên tiếng Việt
+            let badgeClass = 'bg-secondary';
+            let statusText = order.status;
+            
+            if (order.status === 'pending') { badgeClass = 'bg-warning text-dark'; statusText = 'Đang chờ'; }
+            else if (order.status === 'shipped') { badgeClass = 'bg-primary'; statusText = 'Đang giao'; }
+            else if (order.status === 'delivered') { badgeClass = 'bg-success'; statusText = 'Đã giao'; }
+            else if (order.status === 'cancelled') { badgeClass = 'bg-danger'; statusText = 'Đã hủy'; }
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${order.id}</td>
-                <td>${order.user_username} (${order.user})</td>
+                <td>#${order.id}</td>
+                <td><strong>${order.user_username || 'Unknown'}</strong></td>
                 <td>${new Date(order.order_date).toLocaleString('vi-VN')}</td>
-                <td>${parseFloat(order.total_amount).toLocaleString('vi-VN')} VND</td>
-                <td><span class="status-badge ${currentStatus.class}">${currentStatus.text}</span></td>
+                <td>${parseFloat(order.total_amount).toLocaleString('vi-VN')} đ</td>
+                <td><span class="badge ${badgeClass}">${statusText}</span></td>
                 <td>
-                    <select class="form-select form-select-sm status-changer" data-order-id="${order.id}">
-                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Đang chờ</option>
+                    <select class="form-select form-select-sm status-select" data-id="${order.id}">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Chờ xử lý</option>
                         <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Vận chuyển</option>
-                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Đã giao</option>
-                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Đã hủy</option>
+                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Hoàn thành</option>
+                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Hủy đơn</option>
                     </select>
                 </td>
             `;
             ordersTableBody.appendChild(row);
         });
-        
-        // Gắn sự kiện cho các dropdown thay đổi trạng thái
-        document.querySelectorAll('.status-changer').forEach(select => {
+
+        // Gắn sự kiện thay đổi trạng thái cho các ô select vừa tạo
+        document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', updateOrderStatus);
         });
     };
 
+    const renderUsers = (users) => {
+        usersTableBody.innerHTML = '';
+        if (!users || users.length === 0) {
+            usersTableBody.innerHTML = `<tr><td colspan="5" class="text-center">Không tìm thấy user.</td></tr>`;
+            return;
+        }
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td><strong>${user.username}</strong></td>
+                <td>${user.email}</td>
+                <td>${user.is_staff ? '<span class="badge bg-danger">Admin</span>' : '<span class="badge bg-info text-dark">User</span>'}</td>
+                <td>—</td> 
+            `;
+            // Lưu ý: Djoser mặc định có thể không trả về date_joined, nên để tạm —
+            usersTableBody.appendChild(row);
+        });
+    };
+
+    // ============================================================
+    // 4. LOGIC GỌI API (QUAN TRỌNG)
+    // ============================================================
+
+    // Hàm cập nhật trạng thái đơn hàng
     const updateOrderStatus = async (e) => {
-        const orderId = e.target.dataset.orderId;
+        const orderId = e.target.dataset.id;
         const newStatus = e.target.value;
-        const statusMessageEl = document.getElementById('orders-status-message');
 
         try {
             const response = await fetch(`${ORDER_API_URL}${orderId}/`, {
-                method: 'PATCH', // Dùng PATCH để cập nhật 1 trường
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `JWT ${token}`
@@ -92,65 +117,53 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                statusMessageEl.textContent = `Đã cập nhật trạng thái đơn hàng #${orderId} thành ${newStatus}.`;
-                statusMessageEl.className = 'alert alert-success d-block';
-                loadAllData(); // Tải lại dữ liệu
+                // Hiển thị thông báo thành công nhỏ
+                alert(`Cập nhật đơn hàng #${orderId} thành công!`);
+                // Tải lại dữ liệu để cập nhật màu sắc badge
+                loadData(); 
             } else {
-                const error = await response.json();
-                statusMessageEl.textContent = `Lỗi: Không đủ quyền hoặc lỗi server.`;
-                statusMessageEl.className = 'alert alert-danger d-block';
+                alert('Lỗi: Không thể cập nhật trạng thái.');
             }
-        } catch (error) {
-            statusMessageEl.textContent = `Lỗi kết nối: Server không phản hồi.`;
-            statusMessageEl.className = 'alert alert-danger d-block';
+        } catch (err) {
+            alert('Lỗi kết nối server.');
         }
     };
 
-
-    // ====================================================
-    // === 3. HÀM TẢI DỮ LIỆU USER VÀ RENDER (Read-only) ===
-    // ====================================================
-
-    const renderUsers = (users) => {
-        usersTableBody.innerHTML = '';
-        users.forEach(user => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${user.id}</td>
-                <td>${user.username}</td>
-                <td>${user.email || 'N/A'}</td>
-                <td>${user.is_staff ? '<span class="text-success fw-bold">ADMIN</span>' : 'User thường'}</td>
-                <td>${new Date(user.date_joined).toLocaleDateString('vi-VN')}</td>
-            `;
-            usersTableBody.appendChild(row);
-        });
-    };
-
-    const loadAllData = async () => {
-        // --- Tải Đơn hàng ---
+    // Hàm tải toàn bộ dữ liệu
+    const loadData = async () => {
+        // 1. Tải Đơn hàng
         try {
-            const orderResponse = await fetch(ORDER_API_URL, {
+            const orderRes = await fetch(ORDER_API_URL, {
                 headers: { 'Authorization': `JWT ${token}` }
             });
-            const orders = await orderResponse.json();
+
+            if (orderRes.status === 401 || orderRes.status === 403) {
+                // NẾU LỖI 401/403 TẠI ĐÂY => CHẮC CHẮN KHÔNG PHẢI ADMIN HOẶC TOKEN HẾT HẠN
+                alert('Bạn không có quyền Admin hoặc phiên đăng nhập hết hạn.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const orders = await orderRes.json();
             renderOrders(orders);
-        } catch (e) {
-            ordersTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Lỗi kết nối API đơn hàng.</td></tr>`;
+
+        } catch (error) {
+            console.error(error);
+            ordersTableBody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Lỗi tải đơn hàng.</td></tr>`;
         }
 
-        // --- Tải User ---
-        // Djoser không cung cấp /users/all, chúng ta phải dùng /users/
+        // 2. Tải User (Chỉ chạy nếu bước trên không bị đá ra)
         try {
-            const userResponse = await fetch(USER_API_URL, {
-                 headers: { 'Authorization': `JWT ${token}` }
+            const userRes = await fetch(USER_API_URL, {
+                headers: { 'Authorization': `JWT ${token}` }
             });
-            const users = await userResponse.json();
+            const users = await userRes.json();
             renderUsers(users);
-        } catch (e) {
-            usersTableBody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Lỗi kết nối API user.</td></tr>`;
+        } catch (error) {
+            console.error(error);
         }
     };
 
-    // Khởi chạy
-    loadAllData();
+    // Chạy hàm tải dữ liệu ngay khi vào trang
+    loadData();
 });
