@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // ĐÚNG LÀ ADMIN -> Lưu token và vào Dashboard
                    setTimeout(() => {
                         window.location.href = 'admin-products.html';
-                    }, 1000);
+                    }, 500);
                 
                 messageEl.textContent = 'Đăng nhập thành công!';
                 messageEl.className = 'text-center text-success small';

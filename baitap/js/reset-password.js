@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 messageEl.className = 'form-message success';
                 
                 setTimeout(() => {
-                    window.location.href = 'index.html'; // Chuyển về trang login
-                }, 2000); // Chờ 2 giây
+                    window.location.href = 'index.html';
+                }, 1000); // Chờ 1 giây
 
             } else {
                 // Thất bại

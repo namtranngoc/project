@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 registerMessageEl.textContent = 'Đăng ký thành công! Vui lòng đăng nhập.';
                 registerMessageEl.className = 'form-message success';
-                setTimeout(() => showForm('login'), 1000); 
+                setTimeout(() => showForm('login'), 500); 
             } else {
                 const errors = await response.json();
                 let errorMsg = 'Đăng ký thất bại: ';
