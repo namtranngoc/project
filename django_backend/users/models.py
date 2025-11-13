@@ -4,5 +4,5 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(unique=True)
     # Bạn có thể thêm các trường tùy chỉnh ở đây sau
