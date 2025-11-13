@@ -7,14 +7,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# --- CẤU HÌNH CỨNG (KHỎI CẦN ENV) ---
-SECRET_KEY = 'zxcxfdf@!fdgsdhjhkkuu!dfgf'
+# --- CẤU HÌNH CỨNG (KHỎI CẦN ENV, CHO PYTHONANYWHERE) ---
+SECRET_KEY = 'zxcxfdf@!fdgsdhjhkkuu!dfgf' # Key của bạn
 
-# Bật DEBUG để xem lỗi nếu có
+# Bật DEBUG để xem lỗi (sau này chạy ngon thì sửa thành False)
 DEBUG = True
 
-# Cho phép tất cả truy cập
-ALLOWED_HOSTS = ['*']
+# Cho phép tên miền của bạn và Vercel truy cập
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'namtranngoc.pythonanywhere.com',
+    'project-delta-three-32.vercel.app',
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -62,7 +66,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# --- DATABASE: SQLITE3 (Lưu vào file trên server PythonAnywhere) ---
+# --- DATABASE: SQLITE3 (Lưu vào file) ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -83,29 +87,43 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# Static files (Quan trọng cho Admin trên PythonAnywhere)
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Nơi collectstatic sẽ gom file vào
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True 
 AUTH_USER_MODEL = 'users.User'
 
-# DJOSER
+# --- CẤU HÌNH TOKEN (JWT) ---
+# Dùng "Bearer" cho chuẩn
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('Bearer',), # Chỉ nghe 'Bearer'
+}
+
+
+# --- CẤU HÌNH DJOSER (Gửi mail) ---
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'djoser.serializers.UserCreateSerializer',
         'user': 'djoser.serializers.UserSerializer',
         'current_user': 'djoser.serializers.UserSerializer',
     },
-    'DOMAIN': 'namtranngoc.pythonanywhere.com', # Thay bằng tên web của bạn
+    'DOMAIN': 'namtranngoc.pythonanywhere.com', # Tên miền backend
     'SEND_ACTIVATION_EMAIL': False,
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset-confirm.html?uid={uid}&token={token}',
-    'USERNAME_RESET_CONFIRM_URL': 'username-reset-confirm.html?uid={uid}&token={token}',
-    'ACTIVATION_URL': 'activate.html?uid={uid}&token={token}',
+    # Link trỏ về Frontend Vercel
+    'PASSWORD_RESET_CONFIRM_URL': 'https://project-delta-three-32.vercel.app/password-reset-confirm.html?uid={uid}&token={token}',
+    'USERNAME_RESET_CONFIRM_URL': 'https://project-delta-three-32.vercel.app/username-reset-confirm.html?uid={uid}&token={token}',
+    'ACTIVATION_URL': 'https://project-delta-three-32.vercel.app/activate.html?uid={uid}&token={token}',
 }
 
-# --- CẤU HÌNH EMAIL (GHI CỨNG VÀO ĐÂY) ---
+# --- CẤU HÌNH EMAIL GMAIL (GHI CỨNG) ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -115,15 +133,3 @@ EMAIL_HOST_USER = 'llsakers2@gmail.com'
 EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr' 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# settings.py
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
-
-SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('Bearer',),
-}
