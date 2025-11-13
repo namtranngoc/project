@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Định nghĩa API
-    const API_URL = 'https://project-ux9u.onrender.com/api/auth/';
+    const API_URL = 'https://namtranngoc.pythonanywhere.com/api/auth/';
     
     // 2. Lấy các phần tử
     const resetForm = document.getElementById('reset-form');

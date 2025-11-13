@@ -3,7 +3,7 @@
 // trên các trang chung (index.html, cart.html, v.v.)
 
 // 1. Định nghĩa API URL
-const API_URL = 'https://project-ux9u.onrender.com/api/auth/';
+const API_URL = 'https://namtranngoc.pythonanywhere.com/api/auth/';
 
 // 2. Chờ cho toàn bộ HTML tải xong
 document.addEventListener('DOMContentLoaded', () => {
