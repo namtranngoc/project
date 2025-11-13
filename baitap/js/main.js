@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 4. NẾU ĐÃ ĐĂNG NHẬP
 
         // Lấy thông tin user (để hiển thị tên)
-        fetch(API_URL + 'users/me/', {
+        fetch(API_URL + 'users/user/', {
             method: 'GET',
             headers: {
                 // Gửi token lên để xác thực
