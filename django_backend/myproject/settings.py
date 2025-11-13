@@ -8,7 +8,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- CẤU HÌNH CỨNG (KHỎI CẦN ENV) ---
-SECRET_KEY = 'django-insecure-bat-ky-ky-tu-nao-ban-thich-viet-dai-dai-ra'
+SECRET_KEY = 'zxcxfdf@!fdgsdhjhkkuu!dfgf'
 
 # Bật DEBUG để xem lỗi nếu có
 DEBUG = True
@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     'users',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -110,9 +111,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# 👇 SỬA 2 DÒNG DƯỚI ĐÂY THÀNH THÔNG TIN THẬT CỦA BẠN 👇
 EMAIL_HOST_USER = 'llsakers2@gmail.com' 
 EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr' 
-# 👆 -------------------------------------------------- 👆
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
