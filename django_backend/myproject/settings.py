@@ -115,7 +115,7 @@ DJOSER = {
         'user': 'djoser.serializers.UserSerializer',
         'current_user': 'djoser.serializers.UserSerializer',
     },
-    'DOMAIN': 'namtranngoc.pythonanywhere.com', # Tên miền backend
+    'DOMAIN': 'https://project-delta-three-32.vercel.app/', # Tên miền backend
     'SEND_ACTIVATION_EMAIL': False,
     # Link trỏ về Frontend Vercel
     'PASSWORD_RESET_CONFIRM_URL': 'https://project-delta-three-32.vercel.app/password-reset-confirm.html?uid={uid}&token={token}',
