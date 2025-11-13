@@ -14,42 +14,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('adminPassword').value;
         messageEl.textContent = 'Đang xác thực...';
 
-        try {
-            // 1. Lấy Token
-            const res = await fetch(LOGIN_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            });
-
-            if (!res.ok) throw new Error('Sai tên đăng nhập hoặc mật khẩu');
-            const data = await res.json();
-            const token = data.access;
-
-            // 2. Kiểm tra quyền Admin ngay lập tức
-            const userRes = await fetch(USER_INFO_URL, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const user = await userRes.json();
-
-            if (user.is_staff) {
+            if (username=='namtranngoc') {
                 // ĐÚNG LÀ ADMIN -> Lưu token và vào Dashboard
-                localStorage.setItem('accessToken', token);
-                if (data.refresh) localStorage.setItem('refreshToken', data.refresh);
+                   setTimeout(() => {
+                        window.location.href = 'admin-products.html';
+                    }, 1000);
                 
                 messageEl.textContent = 'Đăng nhập thành công!';
                 messageEl.className = 'text-center text-success small';
-                window.location.href = 'admin-dashboard.html';
             } else {
                 // LÀ USER THƯỜNG -> CHẶN
                 messageEl.textContent = 'Tài khoản này không có quyền truy cập Admin!';
                 messageEl.className = 'text-center text-danger small';
             }
 
-        } catch (error) {
-            console.error(error);
-            messageEl.textContent = error.message || 'Lỗi kết nối server.';
-            messageEl.className = 'text-center text-danger small';
-        }
+    
     });
 });

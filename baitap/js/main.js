@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch(API_URL + 'users/me/', {
             method: 'GET',
             headers: {
-                'Authorization': `JWT ${accessToken}`,
+                'Authorization': `Bearer ${accessToken}`, // Đã sửa thành Bearer cho chuẩn
                 'Content-Type': 'application/json'
             }
         })
