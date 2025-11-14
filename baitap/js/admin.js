@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('adminLoginForm');
     const messageEl = document.getElementById('adminMessage');
-
+    const API_BASE = 'https://namtranngoc.pythonanywhere.com';
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         messageEl.textContent = 'Đang xác thực...';
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(loginForm);
 
         try {
-            const res = await fetch('/api/admin-login/', {
+            const res = await fetch(`${API_BASE}/api/admin/`, {
                 method: 'POST',
                 body: formData
             });
