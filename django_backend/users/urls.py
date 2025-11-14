@@ -4,5 +4,7 @@ from . import views
 
 urlpatterns = [
     path('list/', list_users, name='list_users'),
-    path('admin/', views.admin_login, name='admin-login'),
+    path('admin-login/', views.admin_login, name='admin-login'),
 ]
+from django.urls import path
+from . import views
