@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    const API_URL = 'https://namtranngoc.pythonanywhere.com/api/auth/';
     // ---- Products ----
     const productForm = document.getElementById('product-form');
     const productsTableBody = document.getElementById('products-table-body');
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(productForm);
-        const res = await fetch('/products/', { method: 'POST', body: formData });
+        const res = await fetch(API_URL + '/data/producs.js', { method: 'POST', body: formData });
         if(res.ok){
             alert('Thêm sản phẩm thành công!');
             productForm.reset();
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function loadProducts(){
-        const res = await fetch('/products/');
+        const res = await fetch(API_URL + '/products');
         if(!res.ok) return;
         const data = await res.json();
         productsTableBody.innerHTML = '';
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Users ----
     const usersTableBody = document.getElementById('users-table-body');
     async function loadUsers(){
-        const res = await fetch('/users/');
+        const res = await fetch(API_URL + '/users');
         if(!res.ok) return;
         const data = await res.json();
         usersTableBody.innerHTML = '';
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Orders ----
     const ordersTableBody = document.getElementById('orders-table-body');
     async function loadOrders(){
-        const res = await fetch('/orders/');
+        const res = await fetch(API_URL + '/orders');
         if(!res.ok) return;
         const data = await res.json();
         ordersTableBody.innerHTML = '';
