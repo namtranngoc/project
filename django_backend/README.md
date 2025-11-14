@@ -66,3 +66,7 @@ project-delta-three-32.vercel.app
 
 # fontend đẩy lên server https://vercel.com/
 # backend đẩy lên server https://www.pythonanywhere.com/
+
+# git fetch origin → lấy cập nhật từ remote mà chưa merge.
+
+# git reset --hard origin/main → reset tất cả file local giống hoàn toàn remote, mọi thay đổi trên server bị mất.
