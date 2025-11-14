@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from orders.views import OrderAdminViewSet
 from rest_framework.routers import DefaultRouter
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'orders/admin', OrderAdminViewSet, basename='admin-orders')
@@ -28,4 +29,12 @@ urlpatterns = [
     path('api/auth/', include('djoser.urls')),
     path('api/auth/', include('djoser.urls.jwt')),
     path('api/', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('products/', include('products.urls')),
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

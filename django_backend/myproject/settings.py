@@ -16,6 +16,10 @@ DEBUG = True
 # Cho phép tất cả truy cập
 ALLOWED_HOSTS = ['*']
 
+AUTH_USER_MODEL = 'users.User'
+
+MEDIA_URL = '/media/'  # URL truy cập file
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Thư mục lưu file vật lý
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -134,3 +138,4 @@ EMAIL_HOST_USER = 'llsakers2@gmail.com'
 EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr'
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
