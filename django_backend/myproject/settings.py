@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'orders',
+    'products',
 ]
 
 # QUAN TRỌNG: ID của site mặc định

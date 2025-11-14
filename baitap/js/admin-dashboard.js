@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(productForm);
-        const res = await fetch('/products/create/', { method: 'POST', body: formData });
+        const res = await fetch('/products/', { method: 'POST', body: formData });
         if(res.ok){
             alert('Thêm sản phẩm thành công!');
             productForm.reset();
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     async function loadProducts(){
-        const res = await fetch('/products/list/');
+        const res = await fetch('/products/');
         if(!res.ok) return;
         const data = await res.json();
         productsTableBody.innerHTML = '';
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Users ----
     const usersTableBody = document.getElementById('users-table-body');
     async function loadUsers(){
-        const res = await fetch('/users/list/');
+        const res = await fetch('/users/');
         if(!res.ok) return;
         const data = await res.json();
         usersTableBody.innerHTML = '';
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Orders ----
     const ordersTableBody = document.getElementById('orders-table-body');
     async function loadOrders(){
-        const res = await fetch('/orders/list/');
+        const res = await fetch('/orders/');
         if(!res.ok) return;
         const data = await res.json();
         ordersTableBody.innerHTML = '';
