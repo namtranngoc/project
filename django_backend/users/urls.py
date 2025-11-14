@@ -1,10 +1,9 @@
-from django.urls import path
+from django.urls import path, include
 from .views import list_users
-from . import views
+from django.contrib import admin
 
 urlpatterns = [
     path('list/', list_users, name='list_users'),
-    path('admin-login/', views.admin_login, name='admin-login'),
+    path('admin/', admin.site.urls),
+    path('api/', include('users.urls')),
 ]
-from django.urls import path
-from . import views

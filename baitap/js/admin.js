@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        messageEl.textContent = 'Đang xác thực...';
-        messageEl.className = 'text-center text-info small';
 
         const formData = new FormData(loginForm);
 
@@ -18,17 +16,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.success) {
                 messageEl.textContent = data.message;
-                messageEl.className = 'text-center text-success small';
+                messageEl.style.color = 'green';
                 setTimeout(() => {
-                    window.location.href = 'admin-products.html';
+                    window.location.href = 'admin-products.html';  // redirect
                 }, 500);
             } else {
                 messageEl.textContent = data.message;
-                messageEl.className = 'text-center text-danger small';
+                messageEl.style.color = 'red';
             }
         } catch (err) {
             messageEl.textContent = 'Lỗi server!';
-            messageEl.className = 'text-center text-danger small';
+            messageEl.style.color = 'red';
         }
     });
 });
