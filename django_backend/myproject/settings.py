@@ -9,17 +9,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- CẤU HÌNH CỨNG (KHỎI CẦN ENV) ---
 SECRET_KEY = 'zxcxfdf@!fdgsdhjhkkuu!dfgf-khoa-bi-mat-cua-ban'
-
-# Bật DEBUG
 DEBUG = True
+ALLOWED_HOSTS = ['*'] # Cho phép tất cả
 
-# Cho phép tất cả truy cập
-ALLOWED_HOSTS = ['*']
-
-AUTH_USER_MODEL = 'users.User'
-
-MEDIA_URL = '/media/'  # URL truy cập file
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Thư mục lưu file vật lý
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,7 +30,6 @@ INSTALLED_APPS = [
     'products',
 ]
 
-# QUAN TRỌNG: ID của site mặc định
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -92,12 +83,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
+# --- FILE TĨNH (STATIC) VÀ FILE UP (MEDIA) ---
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media' # Đã chuyển xuống đây cho đúng
+
+# Custom settings
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User' # Chỉ khai báo 1 lần ở đây
 CORS_ALLOW_ALL_ORIGINS = True
 
 # --- CẤU HÌNH JWT ---
@@ -111,21 +106,22 @@ SIMPLE_JWT = {
    'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# --- CẤU HÌNH DJOSER (QUAN TRỌNG NHẤT) ---
+# --- CẤU HÌNH DJOSER (ĐÃ SỬA LẠI LINK) ---
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'djoser.serializers.UserCreateSerializer',
         'user': 'djoser.serializers.UserSerializer',
         'current_user': 'djoser.serializers.UserSerializer',
     },
-    # Dòng này để Backend biết nó là ai (không ảnh hưởng link gửi đi nếu dùng link tuyệt đối dưới)
-    'DOMAIN': '',
+    # 1. Đặt domain là tên miền Backend
+    'DOMAIN': 'namtranngoc.pythonanywhere.com', 
     'SEND_ACTIVATION_EMAIL': False,
 
-    # Lưu ý: Không có chữ '/baitap' vì Vercel đã set root là baitap rồi
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset-confirm.html?uid={uid}&token={token}',
-    'USERNAME_RESET_CONFIRM_URL': 'username-reset-confirm.html?uid={uid}&token={token}',
-    'ACTIVATION_URL': 'activate.html?uid={uid}&token={token}',
+    # 2. Link trỏ về chính nó (vì FE giờ nằm chung)
+    # (Lưu ý: Bỏ chữ /baitap/ vì chúng ta đã set root là /)
+    'PASSWORD_RESET_CONFIRM_URL': 'https://namtranngoc.pythonanywhere.com/password-reset-confirm.html?uid={uid}&token={token}',
+    'USERNAME_RESET_CONFIRM_URL': 'https://namtranngoc.pythonanywhere.com/username-reset-confirm.html?uid={uid}&token={token}',
+    'ACTIVATION_URL': 'https://namtranngoc.pythonanywhere.com/activate.html?uid={uid}&token={token}',
 }
 
 # --- CẤU HÌNH EMAIL ---
@@ -134,9 +130,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# 👇 Thay bằng mật khẩu thật của bạn 👇
-EMAIL_HOST_USER = 'llsakers2@gmail.com'
-EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr'
+EMAIL_HOST_USER = 'llsakers2@gmail.com' 
+EMAIL_HOST_PASSWORD = 'wiertfwsfnluaeyr' 
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
