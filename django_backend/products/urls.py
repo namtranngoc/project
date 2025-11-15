@@ -1,7 +1,14 @@
-from django.urls import path
-from .views import create_product, list_products
+# project/django_backend/products/urls.py
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ProductViewSet  # Import Class ProductViewSet
+
+# Tạo router riêng cho app này
+router = DefaultRouter()
+router.register(r'', ProductViewSet, basename='product') # Đăng ký /products/
 
 urlpatterns = [
-    path('create/', create_product, name='create_product'),
-    path('list/', list_products, name='list_products'),
+    # Gắn router vào
+    path('', include(router.urls)),
 ]
