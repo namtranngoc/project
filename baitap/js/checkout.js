@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             <div class="text-center mt-5">
                 <a href="index.html" class="btn btn-primary me-2">Tiếp tục mua sắm</a>
-                <a href="#" class="btn btn-secondary" onclick="window.print()">In đơn hàng</a>
+                <a href="my-orders.html" class="btn btn-secondary"">Xem Đơn Hàng</a>
             </div>
         `;
     }
