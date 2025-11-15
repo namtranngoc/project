@@ -1,9 +1,13 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.response import Response # <--- DÒNG BỊ THIẾU ĐÃ ĐƯỢC THÊM
+
 from .models import Order
 from .serializers import OrderSerializer
-from rest_framework.decorators import action
-from rest_framework import status
+from django.core.mail import send_mail 
+from django.conf import settings 
+
 
 # ViewSet này DÀNH CHO ADMIN (Quản lý tất cả đơn hàng)
 class OrderAdminViewSet(viewsets.ModelViewSet):
@@ -15,9 +19,10 @@ class OrderAdminViewSet(viewsets.ModelViewSet):
 class OrderUserViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+    
     @action(detail=True, methods=['patch']) # Cho phép PATCH tại /orders/{id}/cancel/
     def cancel(self, request, pk=None):
-        order = self.get_object() # Lấy đơn hàng (đã được lọc chỉ của user này)
+        order = self.get_object() 
         
         # Kiểm tra trạng thái: chỉ cho huỷ nếu đang chờ xử lý
         if order.status == 'pending':
@@ -62,11 +67,11 @@ class OrderUserViewSet(viewsets.ModelViewSet):
             send_mail(
                 subject,
                 message,
-                settings.DEFAULT_FROM_EMAIL, # Email người gửi (đã cấu hình trong settings.py)
-                [user_email], # Email người nhận
+                settings.DEFAULT_FROM_EMAIL, 
+                [user_email], 
                 fail_silently=False,
             )
             print(f"DEBUG: Sent email for Order #{order.id} to {user_email}")
         except Exception as e:
-            print(f"ERROR: Failed to send email for Order #{order.id}. Error: {e}")
             # Dù gửi email lỗi, vẫn không hủy đơn hàng
+            print(f"ERROR: Failed to send email for Order #{order.id}. Error: {e}")
