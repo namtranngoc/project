@@ -119,9 +119,9 @@ DJOSER = {
 
     # 2. Link trỏ về chính nó (vì FE giờ nằm chung)
     # (Lưu ý: Bỏ chữ /baitap/ vì chúng ta đã set root là /)
-    'PASSWORD_RESET_CONFIRM_URL': 'https://namtranngoc.pythonanywhere.com/password-reset-confirm.html?uid={uid}&token={token}',
-    'USERNAME_RESET_CONFIRM_URL': 'https://namtranngoc.pythonanywhere.com/username-reset-confirm.html?uid={uid}&token={token}',
-    'ACTIVATION_URL': 'https://namtranngoc.pythonanywhere.com/activate.html?uid={uid}&token={token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset-confirm.html?uid={uid}&token={token}',
+    'USERNAME_RESET_CONFIRM_URL': 'username-reset-confirm.html?uid={uid}&token={token}',
+    'ACTIVATION_URL': 'activate.html?uid={uid}&token={token}',
 }
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
