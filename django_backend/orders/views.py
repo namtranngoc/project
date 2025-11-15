@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import Order
 from .serializers import OrderSerializer
+from rest_framework.decorators import action
+from rest_framework import status
 
 # ViewSet này DÀNH CHO ADMIN (Quản lý tất cả đơn hàng)
 class OrderAdminViewSet(viewsets.ModelViewSet):
