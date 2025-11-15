@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import action
-from rest_framework.response import Response # <--- DÒNG BỊ THIẾU ĐÃ ĐƯỢC THÊM
+from rest_framework.response import Response
 
 from .models import Order
 from .serializers import OrderSerializer
@@ -20,7 +20,8 @@ class OrderUserViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
     
-    @action(detail=True, methods=['patch']) # Cho phép PATCH tại /orders/{id}/cancel/
+    # 1. API HỦY ĐƠN (PATCH /orders/{id}/cancel/)
+    @action(detail=True, methods=['patch']) 
     def cancel(self, request, pk=None):
         order = self.get_object() 
         
@@ -33,32 +34,26 @@ class OrderUserViewSet(viewsets.ModelViewSet):
         # Nếu không phải trạng thái pending
         return Response({'detail': 'Chỉ có thể huỷ đơn hàng đang chờ xử lý.'}, status=status.HTTP_400_BAD_REQUEST)
 
+    # 2. Lấy danh sách đơn hàng của riêng user này (GET /orders/)
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
-    # --- SỬA HÀM NÀY ĐỂ THÊM GỬI EMAIL ---
+    # 3. Gán user và gửi mail khi tạo đơn hàng (POST /orders/)
     def perform_create(self, serializer):
-        # 1. Lưu đơn hàng
+        # Lưu đơn hàng và gán user
         order = serializer.save(user=self.request.user, status='pending')
         
-        # 2. Gửi Email xác nhận (với mã vận đơn là Order ID)
+        # --- LOGIC GỬI EMAIL (PHẦN NÀY LÀ MỤC ĐÍCH GÂY RA LỖI) ---
         subject = f'Xác nhận đơn hàng #{order.id} của Real Madrid Shop'
-        
-        # Lấy thông tin user và tổng tiền
         user_email = self.request.user.email
         total_formatted = f"{order.total_amount:,.0f} VND"
         
-        # Nội dung Email
         message = (
             f"Xin chào {self.request.user.first_name or self.request.user.username},\n\n"
             f"Đơn hàng của bạn đã được tiếp nhận thành công.\n"
             f"Mã đơn hàng: #{order.id}\n"
             f"Tổng thanh toán: {total_formatted}\n"
-            f"Trạng thái: Đang chờ xử lý\n"
             f"Địa chỉ nhận hàng: {order.shipping_address}\n\n"
-            
-            f"***Mã vận đơn tạm thời***: {order.id} (Sẽ được cập nhật khi đơn hàng được chuyển sang trạng thái 'Đã vận chuyển').\n\n"
-            
             f"Cảm ơn bạn đã mua hàng!\n"
             f"Real Madrid Shop"
         )
@@ -71,7 +66,6 @@ class OrderUserViewSet(viewsets.ModelViewSet):
                 [user_email], 
                 fail_silently=False,
             )
-            print(f"DEBUG: Sent email for Order #{order.id} to {user_email}")
         except Exception as e:
             # Dù gửi email lỗi, vẫn không hủy đơn hàng
             print(f"ERROR: Failed to send email for Order #{order.id}. Error: {e}")
