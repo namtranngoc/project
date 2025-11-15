@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!grid) return;
         grid.innerHTML = '<p class="text-center">Đang tải sản phẩm...</p>';
         try {
+            // GỌI API SẢN PHẨM (Không cần token vì đã AllowAny)
             const response = await fetch(PRODUCT_API_URL); 
             if (!response.ok) {
                 throw new Error('Không thể tải sản phẩm. Server có thể đang lỗi.');
@@ -100,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const showLoginButton = () => {
             if (authButtonsContainer) {
-                // Giữ nguyên cấu trúc HTML gốc của bạn
                 authButtonsContainer.innerHTML = `
                     <a href="login.html" class="btn btn-primary nav-link text-white px-3">Đăng nhập</a>
                 `;
@@ -120,14 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const user = await res.json();
             
-            // Đăng nhập thành công, đổi nút
             if (authButtonsContainer) {
-                // Sửa lại cho khớp với <li>
                 authButtonsContainer.innerHTML = `
-                    <span class="nav-link text-dark fw-bold">Chào, ${user.first_name || user.username}</span>
+                    <span class="nav-link text-dark fw-bold me-2">Chào, ${user.first_name || user.username}</span>
                     <a href="#" id="logout-link" class="nav-link text-danger">Đăng xuất</a>
                 `;
-                // Gắn sự kiện cho nút Đăng xuất
                 document.getElementById('logout-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('accessToken');

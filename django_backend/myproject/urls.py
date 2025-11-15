@@ -1,46 +1,26 @@
-"""
-URL configuration for myproject project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
-from orders.views import OrderAdminViewSet
-from rest_framework.routers import DefaultRouter
-from django.conf import settings
-from django.conf.urls.static import static
-from products.views import ProductViewSet
+from rest_framework.routers import DefaultRouter 
 
+# Import các ViewSet của bạn
+from orders.views import OrderAdminViewSet
+from products.views import ProductViewSet 
+
+# Tạo một Router (bộ định tuyến)
 router = DefaultRouter()
+# Đăng ký ViewSet đơn hàng (API: /api/orders/admin/)
 router.register(r'orders/admin', OrderAdminViewSet, basename='admin-orders')
-router.register(r'products', ProductViewSet, basename='product')
+# Đăng ký ViewSet sản phẩm (API: /api/products/)
+router.register(r'products', ProductViewSet, basename='product') 
+
+# Đây là tất cả các đường dẫn của bạn
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # 2. Thêm 2 dòng này để kích hoạt API của Djoser
+    
+    # URL cho Đăng nhập/Đăng ký (Djoser)
     path('api/auth/', include('djoser.urls')),
-    path('api/auth/', include('djoser.urls.jwt')),
-    path('api/', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('products/', include('products.urls')),
-    path('orders/', include('orders.urls')),
-    path('users/', include('users.urls')),
-    path('api/', include('users.urls')),
-    path('api/', include(router.urls)),
+    path('api/auth/', include('djoser.urls.jwt')), # Dùng 'Bearer' token
+    
+    # URL cho Đơn hàng và Sản phẩm (từ router ở trên)
+    path('api/', include(router.urls)), 
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
