@@ -1,12 +1,13 @@
-// js/product-detail.js
+// js/product-detail.js (Đã thêm hiệu ứng Bay vào giỏ)
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // API Backend (Phải giống hệt các file JS khác)
+    // API Backend
     const API_BASE = 'https://namtranngoc.pythonanywhere.com';
     const PRODUCT_API_URL = `${API_BASE}/api/products/`;
 
     const container = document.getElementById('product-detail-container');
+    let currentProduct = null; // Biến lưu sản phẩm đang xem
 
     // Hàm để lấy ID sản phẩm từ URL (ví dụ: ?id=1)
     function getProductId() {
@@ -14,7 +15,44 @@ document.addEventListener('DOMContentLoaded', () => {
         return params.get('id');
     }
 
-    // Hàm tải dữ liệu chi tiết
+    // === HÀM ANIMATION (Copy từ main.js) ===
+    function flyToCart(button) {
+        // Lấy ảnh gốc (lần này ta tìm bằng ID)
+        const originalImage = document.getElementById('product-detail-image');
+        const cartIcon = document.getElementById('cart-count');
+
+        if (!originalImage || !cartIcon) return;
+
+        const originalImageRect = originalImage.getBoundingClientRect();
+        const cartIconRect = cartIcon.getBoundingClientRect();
+
+        const clone = originalImage.cloneNode(true);
+        clone.classList.add('fly-to-cart-clone'); 
+        
+        clone.style.left = `${originalImageRect.left}px`;
+        clone.style.top = `${originalImageRect.top}px`;
+        clone.style.width = `${originalImageRect.width}px`;
+        clone.style.height = `${originalImageRect.height}px`;
+
+        document.body.appendChild(clone);
+
+        requestAnimationFrame(() => {
+            clone.style.left = `${cartIconRect.left + cartIconRect.width / 2}px`;
+            clone.style.top = `${cartIconRect.top + cartIconRect.height / 2}px`;
+            clone.style.transform = 'scale(0.1)';
+            clone.style.opacity = '0.5';
+        });
+
+        clone.addEventListener('transitionend', () => {
+            clone.remove();
+            cartIcon.classList.add('cart-shake');
+            setTimeout(() => {
+                cartIcon.classList.remove('cart-shake');
+            }, 300);
+        });
+    }
+
+    // === HÀM TẢI DỮ LIỆU (ĐÃ SỬA NÚT BẤM) ===
     async function loadProductDetail() {
         const productId = getProductId();
         if (!productId) {
@@ -29,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Không tìm thấy sản phẩm hoặc server lỗi.');
             }
             const p = await response.json();
+            currentProduct = p; // Lưu sản phẩm vào biến
             
             // Render HTML
             const priceFmt = parseFloat(p.price).toLocaleString('vi-VN');
@@ -36,14 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             container.innerHTML = `
                 <div class="col-md-6">
-                    <img src="${imageUrl}" alt="${p.name}" class="img-fluid rounded">
+                    <img src="${imageUrl}" alt="${p.name}" class="img-fluid rounded" id="product-detail-image">
                 </div>
                 <div class="col-md-6">
                     <h2>${p.name}</h2>
                     <h3 class="text-danger fw-bold">${priceFmt} đ</h3>
                     <p>Tình trạng kho: <strong>${p.stock > 0 ? p.stock : 'Hết hàng'}</strong></p>
                     <hr>
-                    <p>Mô tả (Tạm thời): Đây là sản phẩm áo đấu chính thức của CLB Real Madrid, mùa giải 2024-2025...</p>
+                    <p>${p.description || 'Sản phẩm chưa có mô tả.'}</p>
                     
                     <div class="d-grid gap-2">
                          <button type="button" class="btn btn-primary btn-lg add-to-cart" data-id="${p.id}" ${p.stock <= 0 ? 'disabled' : ''}>
@@ -52,10 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
             `;
-            
             // Gắn sự kiện cho nút Thêm vào giỏ
              container.querySelector('.add-to-cart').addEventListener('click', (e) => {
-                 alert('Đã thêm vào giỏ! (Tạm thời) - ID: ' + e.target.dataset.id);
+                
+                // --- BƯỚC KIỂM TRA ĐĂNG NHẬP ---
+                const token = localStorage.getItem('accessToken');
+                if (!token) {
+                    // Nếu chưa đăng nhập, đá về trang login
+                    window.location.href = 'login.html';
+                    return; // Dừng lại, không thêm vào giỏ
+                }
+                // ---------------------------------
+
+                 // Gọi hàm từ cart.js
+                 if (currentProduct) {
+                     addToCart(currentProduct);
+                     // Gọi hàm animation
+                     flyToCart(e.target);
+                 }
              });
 
         } catch (error) {

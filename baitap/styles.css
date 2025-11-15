@@ -85,3 +85,35 @@ a{ color:inherit; text-decoration:none }
 .brand-shop{ color:#0b2141; margin-left:2px }
 .navbar.navbar-light .nav-link{ color:#000000; opacity:.95 }
 .navbar.navbar-light .nav-link.active{ color: var(--brand); font-weight:600 }
+/* --- CSS CHO HIỆU ỨNG BAY VÀO GIỎ HÀNG --- */
+
+/* 1. Lớp (class) cho cái ảnh clone bay đi */
+.fly-to-cart-clone {
+    /* Đặt cố định trên màn hình, bỏ qua cuộn chuột */
+    position: fixed; 
+    
+    /* Nằm đè lên trên mọi thứ */
+    z-index: 1100; 
+    
+    /* Bo tròn và thêm viền (tùy chọn) */
+    border-radius: 10px;
+    border: 2px solid #0d6efd; 
+    
+    /* Đây là phần animation (hoạt ảnh) */
+    transition: all 0.7s cubic-bezier(0.55, 0, 1, 0.45); 
+    /* cubic-bezier tạo hiệu ứng "bay vòng cung" đẹp mắt */
+}
+
+/* 2. Lớp (class) cho icon giỏ hàng "rung" lên khi nhận đồ */
+.cart-shake {
+    animation: shake 0.3s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+}
+
+/* 3. Định nghĩa animation tên là 'shake' */
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}

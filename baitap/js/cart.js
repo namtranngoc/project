@@ -1,61 +1,61 @@
-// js/cart.js – localStorage-based cart with demo seeding (Lesson 11 + Lesson 13 tweaks)
-const KEY = 'fe_cart_v1';
-const SEEDED = 'fe_cart_seeded';
+// js/cart.js
 
-function read(){
-  try { return JSON.parse(localStorage.getItem(KEY)) || []; }
-  catch { return []; }
-}
-function write(cart){ localStorage.setItem(KEY, JSON.stringify(cart)); }
+// Tên của key trong localStorage
+const CART_KEY = 'myShopCart';
 
-export function getCart(){ return read(); }
-
-export function addToCart(id, qty=1){
-  const cart = read();
-  const i = cart.findIndex(x => String(x.id)===String(id));
-  if(i>=0) cart[i].qty += qty;
-  else cart.push({ id, qty });
-  write(cart);
+/**
+ * Lấy giỏ hàng từ localStorage.
+ * @returns {Array} Mảng các sản phẩm trong giỏ.
+ */
+function getCart() {
+    const cartJSON = localStorage.getItem(CART_KEY);
+    return cartJSON ? JSON.parse(cartJSON) : [];
 }
 
-export function updateQty(id, qty){
-  const cart = read();
-  const i = cart.findIndex(x => String(x.id)===String(id));
-  if(i>=0){
-    cart[i].qty = qty;
-    if(cart[i].qty <= 0){ cart.splice(i,1); }
-    write(cart);
-  }
+/**
+ * Lưu giỏ hàng vào localStorage và cập nhật icon.
+ * @param {Array} cart Mảng giỏ hàng mới.
+ */
+function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    updateCartCount(); // Cập nhật số lượng trên icon
 }
 
-export function removeItem(id){
-  const cart = read().filter(x => String(x.id)!==String(id));
-  write(cart);
+/**
+ * Thêm sản phẩm vào giỏ.
+ * @param {object} product Sản phẩm đầy đủ (lấy từ allProducts).
+ */
+function addToCart(product) {
+    let cart = getCart();
+    
+    // Kiểm tra xem sản phẩm đã có trong giỏ chưa
+    const existingItem = cart.find(item => item.id == product.id);
+    
+    if (existingItem) {
+        // Nếu có, tăng số lượng
+        existingItem.qty += 1;
+    } else {
+        // Nếu chưa có, thêm mới với số lượng là 1
+        // (Chúng ta lưu cả object product để trang cart.html dễ hiển thị)
+        cart.push({ ...product, qty: 1 });
+    }
+    
+    saveCart(cart);
 }
 
-export function clearCart(){ write([]); }
-
-export function cartTotal(products){
-  const cart = read();
-  return cart.reduce((sum, item) => {
-    const p = products.find(x => String(x.id)===String(item.id));
-    return sum + (p ? p.price * item.qty : 0);
-  }, 0);
+/**
+ * Cập nhật số lượng hiển thị trên icon giỏ hàng (navbar).
+ */
+function updateCartCount() {
+    const cart = getCart();
+    // Đếm tổng số lượng (qty) của tất cả các món
+    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0); 
+    
+    const cartCountEl = document.getElementById('cart-count');
+    if (cartCountEl) {
+        cartCountEl.textContent = totalItems;
+    }
 }
 
-export function initCartCount(){
-  const count = read().reduce((s,i)=> s + i.qty, 0);
-  const targets = document.querySelectorAll('#cart-count');
-  targets.forEach(t => t.textContent = count);
-}
-
-// Seed demo cart once so first-time students see data on cart page
-export function seedDemoCart(products){
-  if(localStorage.getItem(SEEDED)) return;
-  const current = read();
-  if(current.length === 0 && Array.isArray(products) && products.length){
-    const demo = products.slice(0,2).map(p => ({ id: p.id, qty: 1 }));
-    write(demo);
-  }
-  localStorage.setItem(SEEDED, '1');
-}
+// Ngay khi file này được tải, nó sẽ cập nhật số lượng trên icon
+document.addEventListener('DOMContentLoaded', updateCartCount);

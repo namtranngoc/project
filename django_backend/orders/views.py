@@ -1,28 +1,26 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser # Chỉ Admin mới được phép
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .models import Order
 from .serializers import OrderSerializer
-from django.http import JsonResponse
 
+# ViewSet này DÀNH CHO ADMIN (Quản lý tất cả đơn hàng)
 class OrderAdminViewSet(viewsets.ModelViewSet):
-    # Admin có thể xem, tạo, sửa, xóa
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    # BẮT BUỘC: Chỉ user có is_staff=True mới được gọi API này
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser] # Chỉ Admin
 
+# --- THÊM CLASS MỚI NÀY VÀO ---
+# ViewSet này DÀNH CHO USER (Chỉ quản lý đơn của mình)
+class OrderUserViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated] # Bắt buộc đăng nhập
 
+    # GET: Chỉ trả về đơn hàng CỦA TÔI
+    def get_queryset(self):
+        # Lọc các đơn hàng chỉ thuộc về user đang đăng nhập
+        return Order.objects.filter(user=self.request.user)
 
-
-def list_orders(request):
-    orders = Order.objects.select_related('user').all()
-    data = []
-    for o in orders:
-        data.append({
-            'id': o.id,
-            'user': o.user.username,
-            'created_at': o.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            'total_price': str(o.total_price),
-            'status': o.status
-        })
-    return JsonResponse(data, safe=False)
+    # POST: Khi tạo đơn, tự động gán user và status
+    def perform_create(self, serializer):
+        # Tự động gán user=người đang đăng nhập, và status='pending'
+        serializer.save(user=self.request.user, status='pending')

@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
-
+from orders.views import OrderAdminViewSet, OrderUserViewSet
 # Import các ViewSet (lớp xử lý) của bạn
 from orders.views import OrderAdminViewSet
 from products.views import ProductViewSet 
@@ -16,6 +16,8 @@ router = DefaultRouter()
 router.register(r'orders/admin', OrderAdminViewSet, basename='admin-orders')
 # Tạo link: /api/products/
 router.register(r'products', ProductViewSet, basename='product') 
+# 2. (Tạo API /api/orders/)
+router.register(r'orders', OrderUserViewSet, basename='order')
 
 # 3. Tạo danh sách URL chính
 urlpatterns = [
