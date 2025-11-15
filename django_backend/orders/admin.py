@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Order
 
-# Register your models here.
+# Dòng này bảo Django "Hãy hiển thị model Order trong trang admin"
+admin.site.register(Order)

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Product
 
-# Register your models here.
+# Dòng này sẽ bảo Django "Hãy hiển thị model Product trong trang admin"
+admin.site.register(Product)
