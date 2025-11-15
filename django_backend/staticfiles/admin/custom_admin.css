@@ -1,0 +1,16 @@
+/* Ghi đè màu nền Header (màu xanh lá mặc định) */
+#header {
+    background-color: #004d98; /* Màu xanh đậm của Real Madrid */
+    color: #fff;
+}
+
+/* Đổi màu link trong header */
+#header a:link, #header a:visited {
+    color: #fff;
+}
+
+/* Đổi màu chữ "TRANG QUẢN TRỊ..." */
+#site-name a {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

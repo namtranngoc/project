@@ -48,7 +48,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,7 +123,9 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'https://namtranngoc.pythonanywhere.com/username-reset-confirm.html?uid={uid}&token={token}',
     'ACTIVATION_URL': 'https://namtranngoc.pythonanywhere.com/activate.html?uid={uid}&token={token}',
 }
-
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # --- CẤU HÌNH EMAIL ---
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

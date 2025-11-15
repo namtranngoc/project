@@ -64,9 +64,14 @@ postgresql://project_wpr4_user:fglVOG9lvz9lDpaAcE7OF4iUmNqqlM0S@dpg-d4a6g2vgi27c
 https://project-ux9u.onrender.com/
 project-delta-three-32.vercel.app
 
-# fontend đẩy lên server https://vercel.com/
-# backend đẩy lên server https://www.pythonanywhere.com/
+#  đẩy lên server https://www.pythonanywhere.com/
 
 # git fetch origin → lấy cập nhật từ remote mà chưa merge.
 
 # git reset --hard origin/main → reset tất cả file local giống hoàn toàn remote, mọi thay đổi trên server bị mất.
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/namtranngoc/cc.git
+git push -u origin main
