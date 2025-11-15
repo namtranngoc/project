@@ -20,9 +20,11 @@ from orders.views import OrderAdminViewSet
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
+from products.views import ProductViewSet
 
 router = DefaultRouter()
 router.register(r'orders/admin', OrderAdminViewSet, basename='admin-orders')
+router.register(r'products', ProductViewSet, basename='product')
 urlpatterns = [
     path('admin/', admin.site.urls),
     # 2. Thêm 2 dòng này để kích hoạt API của Djoser
@@ -34,6 +36,7 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('users/', include('users.urls')),
     path('api/', include('users.urls')),
+    path('api/', include(router.urls)),
 ]
 
 
