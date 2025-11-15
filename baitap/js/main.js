@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const search = document.getElementById('search');
     const sort = document.getElementById('sort');
     const authButtonsContainer = document.getElementById('authButtons');
-    const cartCountEl = document.getElementById('cart-count');
+    const cartCountEl = document.getElementById('cart-count'); 
     const yearEl = document.getElementById('year');
 
     let allProducts = []; // Biến lưu sản phẩm gốc
@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <article class="card h-100 border-secondary">
-                <a class="ratio ratio-4x3" href="#">
-                  <img src="${imageUrl}" alt="${p.name}" class="card-img-top object-fit-cover rounded-top">
+                <a class="ratio ratio-4x3" href="#"> <img src="${imageUrl}" alt="${p.name}" class="card-img-top object-fit-cover rounded-top">
                 </a>
                 <div class="card-body d-flex flex-column">
                   <h3 class="h6 flex-grow-1"><a class="link-dark text-decoration-none" href="#">${p.name}</a></h3>
@@ -101,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const showLoginButton = () => {
             if (authButtonsContainer) {
+                // Giữ nguyên cấu trúc HTML gốc của bạn
                 authButtonsContainer.innerHTML = `
                     <a href="login.html" class="btn btn-primary nav-link text-white px-3">Đăng nhập</a>
                 `;
@@ -122,9 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Đăng nhập thành công, đổi nút
             if (authButtonsContainer) {
+                // Sửa lại cho khớp với <li>
                 authButtonsContainer.innerHTML = `
-                    <span class="nav-link text-dark fw-bold me-2">Chào, ${user.first_name || user.username}</span>
-                    <button id="logout-link" class="btn btn-outline-danger btn-sm">Đăng xuất</button>
+                    <span class="nav-link text-dark fw-bold">Chào, ${user.first_name || user.username}</span>
+                    <a href="#" id="logout-link" class="nav-link text-danger">Đăng xuất</a>
                 `;
                 // Gắn sự kiện cho nút Đăng xuất
                 document.getElementById('logout-link').addEventListener('click', (e) => {
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 7. CHẠY CÁC HÀM KHỞI ĐỘNG ---
     if (yearEl) yearEl.textContent = new Date().getFullYear();
+    // initCartCount(); // Bạn cần import hàm này từ cart.js nếu muốn dùng
     
     loadProducts(); // Tải sản phẩm từ API
     checkAuth(); // Kiểm tra đăng nhập
