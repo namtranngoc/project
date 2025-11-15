@@ -30,19 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Lấy link ảnh từ model (image_url)
             const imageUrl = p.image_url || 'https://via.placeholder.com/400x300.png?text=No+Image';
 
+            // ...
             return `
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
               <article class="card h-100 border-secondary">
-                <a class="ratio ratio-4x3" href="#"> <img src="${imageUrl}" alt="${p.name}" class="card-img-top object-fit-cover rounded-top">
+                <a class="ratio ratio-4x3" href="product.html?id=${p.id}"> <img src="${imageUrl}" alt="${p.name}" class="card-img-top object-fit-cover rounded-top">
                 </a>
                 <div class="card-body d-flex flex-column">
-                  <h3 class="h6 flex-grow-1"><a class="link-dark text-decoration-none" href="#">${p.name}</a></h3>
-                  <p class="fw-bold mb-2">${priceFmt} đ</p>
-                  <button type="button" class="btn btn-primary w-100 add" data-id="${p.id}" ${p.stock <= 0 ? 'disabled' : ''}>Thêm vào giỏ</button>
-                </div>
-              </article>
-            </div>
-          `;
+                <h3 class="h6 flex-grow-1"><a class="link-dark text-decoration-none" href="product.html?id=${p.id}">${p.name}</a></h3> <p class="fw-bold mb-2">${priceFmt} đ</p>
+                <button type="button" class="btn btn-primary w-100 add" data-id="${p.id}" ${p.stock <= 0 ? 'disabled' : ''}>Thêm vào giỏ</button>`
         }).join('');
 
         // Gắn sự kiện "Thêm vào giỏ"

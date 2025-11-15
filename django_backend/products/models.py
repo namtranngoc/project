@@ -5,6 +5,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image_url = models.URLField(max_length=500, blank=True, null=True)
     stock = models.IntegerField(default=0)
+    
+    # --- THÊM DÒNG NÀY VÀO ---
+    description = models.TextField(blank=True, null=True) # blank=True nghĩa là không bắt buộc
 
     def __str__(self):
         return self.name
