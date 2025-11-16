@@ -83,7 +83,7 @@ a{ color:inherit; text-decoration:none }
 .navbar-brand.brand-logo{ font-weight:800; letter-spacing:0.5px }
 .brand-fe{ color: var(--brand); }
 .brand-shop{ color:#0b2141; margin-left:2px }
-.navbar.navbar-light .nav-link{ color:#000000; opacity:.95 }
+.navbar.navbar-light .nav-link{ color:#000000; opacity:.95; text-align: center; }
 .navbar.navbar-light .nav-link.active{ color: var(--brand); font-weight:600 }
 /* --- CSS CHO HIỆU ỨNG BAY VÀO GIỎ HÀNG --- */
 

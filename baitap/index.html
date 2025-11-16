@@ -9,24 +9,37 @@
 </head>
 <body>
   <header class="site-header mb-3">
-        <nav class="navbar navbar-light navbar-expand-lg container">
-      <a class="navbar-brand brand-logo" href="index.html"><span class="brand-fe">Real Madrid</span><span class="brand-shop">Shop</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navMain">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Sản phẩm</a></li>
-          <li class="nav-item"><a class="nav-link" href="cart.html">Giỏ hàng (<span id="cart-count">0</span>)</a></li>
-          <li class="nav-item"><a class="nav-link" href="checkout.html">Thanh toán</a></li>
-          <li class="nav-item"><a class="nav-link" href="my-orders.html">Đơn Hàng</a></li>
-          <li class="nav-item d-flex align-items-center" id="authButtons">
-            <a href="login.html" class="btn btn-primary nav-link text-white px-3">Đăng nhập</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand brand-logo" href="index.html">
+                <span class="brand-fe">Real Madrid</span><span class="brand-shop">Shop</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center"> <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">Giỏ hàng (<span id="cart-count">0</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="checkout.html">Thanh toán</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="my-orders.html">Đơn Hàng</a>
+                    </li>
+                    <li class="nav-item dropdown" id="authButtons">
+                        <a href="login.html" class="btn btn-primary nav-link text-white px-3">Đăng nhập</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 
   <main class="container">
         <section class="py-3 text-center">

@@ -163,11 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (!res.ok) throw new Error('Token hết hạn');
             const user = await res.json();
+           // ...
             if (authButtonsContainer) {
                 authButtonsContainer.innerHTML = `
-                    <span class="nav-link text-dark fw-bold me-2">Chào, ${user.first_name || user.username}</span>
-                    <a href="#" id="logout-link" class="nav-link text-danger">Đăng xuất</a>
+                    <span class="nav-link text-dark fw-bold">Chào, ${user.first_name || user.username}</span>
+                    <a href="#" id="logout-link" class="nav-link text-danger">(Đăng xuất)</a>
                 `;
+                
+                // Gắn sự kiện cho nút Đăng xuất
                 document.getElementById('logout-link').addEventListener('click', (e) => {
                     e.preventDefault();
                     localStorage.removeItem('accessToken');
