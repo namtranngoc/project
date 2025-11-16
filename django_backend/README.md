@@ -75,3 +75,11 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/namtranngoc/cc.git
 git push -u origin main
+
+
+# cấu hình đường link để reset pass
+
+python manage.py shell
+from django.contrib.sites.models import Site
+Site.objects.create(id=1, domain='......', name='Real Madrid Shop')
+exit()
